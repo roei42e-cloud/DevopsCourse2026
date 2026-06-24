@@ -1,0 +1,26 @@
+services:
+  postgres-db:
+    image: postgres:15
+    container_name: drupal-postgres
+    restart: always
+    environment:
+      POSTGRES_USER: drupal_user
+      POSTGRES_PASSWORD: drupal_password
+      POSTGRES_DB: drupal_db
+    networks:
+      - drupal
+
+  drupal-app:
+    image: drupal:latest
+    container_name: drupal-web
+    ports:
+      - "8080:80"
+    restart: always
+    depends_on:
+      - postgres-db
+    networks:
+      - drupal
+
+networks:
+  drupal:
+    driver: bridge
